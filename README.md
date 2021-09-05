@@ -1,85 +1,80 @@
+A Packet sniffer tool.
 
 
 ------
 
-## We ran project in 2 ways:
-### 1. with Virtual Box - Ubuntu 18.04 LTS. Steps are follow:
+How to run the code:
 
-Initial Setup - Scapy module installation
-Scapy is a tool which uses the sniffer functionality to capture the packets using Python based code.
-`sniffer.py` is the packet sniffer tool written in Python.
+1. Clone this repo!
 
-1) Steps to install scapy - Run the command: 
+   `git clone https://github.com/aakriti0fnu/Develope-a-packet-sniffer.git`
+
+2. In [project directory](./) create a virtual enviroment using `virtualenv` to have package dependencies of this python codebase.
+    
+   First, install external package `virtualenv` on system python.  
+    - if on python(version 2.x) :`pip install virtualenv`, 
+    - if on python(version 3.x) : `python3 -m pip install virtualenv`
    
-   `sudo python3 -m pip install --pre scapy[complete]`
+   Second, create new project virtual environment: `packet_sniffer_env`
+
+   - **create environment** : `virtualenv --python=3.8 packet_sniffer_env38`
+   - **source it**          : `source packet_sniffer_env38/bin/activate`
    
-   **Note-1: To check the interface of your machine, run the command: ifconfig(will be used as an input later!)**
-
-2) After scapy installation, the next step is to run the packet sniffer tool - Run the command: 
-   
-   `sudo ./sniffer.py`
-
-3) Enter the systems interface (Example: `enp0s3`)
-
-4) Enter the experiment number to be performed (Example: `1` for Exp-1, `2` for Exp-2 and `3` for Exp-3)
-
-   **Note-2: Experiment number will give the respective experiment csv files.**
-
-5) Now, perform the experiment corresponding to the number entered.
-
-6) The tool exits gracefully after 30 seconds and generate one of these CSV files (sniffer_aakriti_exp_1.csv/sniffer_aakriti_exp_2.csv/sniffer_aakriti_exp_3.csv) -- for respective experiment.
-
-   **Note-3: Only the file named "sniffer_aakriti_exp_2.csv" is being submitted as per the requirement.**
-
-
-**The important Modules used in the code which helped in the successful run are as follows:**
-
-1) `subprocess` - It helped to establish the network interface to promiscuous mode which helps in capturing all the packets without discarding any unnecessary packets.
-2) `sys` - used to exit the tool gracefully
-3) `csv` - used to create CSV file
-4) `scapy.all` - used to import necessary functions of the scapy module
-
-------
-### 2. On any Operating system using a simple virtual environment manager(no need of virtual box!). Steps are follow:
-
-Requirements to run the code:
-1. To clone this repo(it's private!), add github_username, github_password and remove `<>`.
-   
-   `git clone https://<github_username>:<github_password>@github.com/<github_username>/packet-manipulation-project.git`
-
-2. You need Anaconda to create virtual environment,
-   [please download the anaconda as per you OS](https://www.anaconda.com/products/individual)
-   
-Once you have Anaconda(virtual environment manager), you can follow the below steps:
-
-1. To build virtual environment from scratch:
-   and installing scapy python library in it!
-   
-    ```
-    conda create --name packet_manipulation_env python=3.8
-    conda activate packet_manipulation_env
-    pip install scapy matplotlib
-    ```
-    or (**Note: avoid running below command of used above, it's simply another way to create virtual environment.)**
-    to build virtual environment from generated requirement.txt file(`pip3 freeze > requirements.txt`)
-   
-    ```
-    conda create --name <your_env_name> python=3.8
-    conda activate <your_env_name>
-    pip install -r ./requirements.txt
-    ```
-
-2. how run the `sniffer.py` code.
-   - make sure the conda environment is activate
-   `(packet_manipulation_env)...$`
-   - run the python interpreter with sudo access from [packet-manipulation-project directory](packet-manipulation-project/)
-     
-      `sudo python src/sniffer.py`
-   
-   ------------------------------------
       
-      *** Please check the data/sniffer_aakriti_exp_2.csv file to see the results.
-      Packet Sniffer program exits.
-   ```
+      install project specific dependencies: `pip install scapy matplotlib`
 
-   credits: project done in a group of two with AshwinKumarMuniswamy
+      [scapy source](https://github.com/secdev/scapy), 
+      [scapy docs](https://scapy.readthedocs.io/en/latest/introduction.html)
+      Scapy is a well-known packet manipulation tool which allows to create, modify, send and capture network packets.
+
+   
+   - **freeze it to file** : `pip freeze > requirements.txt`
+   - **load from file**    : `pip install -r requirements.txt`
+   
+
+
+3. 
+   - Specific to `Ubuntu 20.04.3 LTS (Focal Fossa)`, you need to install [tcpdump](http://manpages.ubuntu.com/manpages/trusty/man8/tcpdump.8.html)
+ 
+     `sudo apt-get install tcpdump`
+
+   - you need to check the network-interface, you'll be using is enabled [promiscuous mode](https://www.thegeekdiary.com/how-to-configure-interface-in-promiscuous-mode-in-centos-rhel/). [How to check?](https://tots.1o24.org/how-to-check-if-promiscuous-mode-is-enabled-on-network-interface-in-linux/)
+     
+     to check : `netstat -i`
+
+     to set promiscuous mode: `ip link set wlp108s0 promisc on`
+
+      - by default `ip` command is used, but if you want to use `ifconfig`, Ubuntu 20.04 (Focal Fossa) doesn’t have `ifconfig` command pre-installed. 
+
+         Note: [ip vs ifconfig](https://computingforgeeks.com/ifconfig-vs-ip-usage-guide-on-linux/)
+
+         `sudo apt install net-tools`
+         
+         then, to set promiscuous mode: `ifconfig eth0 promisc`
+      
+      Note: for [debugging purpose](https://askubuntu.com/questions/430355/configure-a-network-interface-into-promiscuous-mode)    
+   - Now, you're ready to run the program.
+
+      `sudo ./packet_sniffer_env38/bin/python src/sniffer.py `
+   
+     Note:
+      - The important Modules used in the code which helped in the successful run are as follows:**
+
+            1) `subprocess` - It helped to establish the network interface to promiscuous mode which helps in capturing all the packets without discarding any unnecessary packets.
+            2) `sys` - used to exit the tool gracefully
+            3) `csv` - used to create CSV file
+            4) `scapy.all` - used to import necessary functions of the scapy module
+
+   - results are in [results/](./results/)   
+
+Future work:
+- to use [scapy-unroot](https://github.com/scapy-unroot/scapy_unroot), scapy without root permissions
+  or [pcapy](https://github.com/helpsystems/pcapy) [without root permissions](https://medium.com/@badbot/safe-packet-capture-python-without-sudo-b08c4c4e531).
+----
+
+Team Members:
+
+Aakriti
+
+Ashwin Kumar Munniswamy
+

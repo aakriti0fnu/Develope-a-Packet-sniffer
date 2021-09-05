@@ -1,9 +1,0 @@
-protocol,count
-ip,238
-tcp,203
-udp,15143
-dns,56
-icmp,0
-http,0
-https,90
-quic,13194
